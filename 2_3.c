@@ -30,7 +30,7 @@ int main(void)
 
 	AnimProperties PropertiesObject;
 
-	for(int i=0;i<3;i++)
+	for(uint32_t i=0;i<3;i++)
 	{
 		password_input[i] = 0;
 	}
@@ -176,7 +176,7 @@ int8_t check_fail_animation(AnimProperties* PropertiesPtr)
 			PropertiesPtr->error_counter++;
 			button_counter = 0;
 
-			for(int i=0;i<3;i++)
+			for(uint32_t i=0;i<3;i++)
 			{
 				password_input[i] = 0;
 			}
