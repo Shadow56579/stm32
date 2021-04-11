@@ -32,7 +32,7 @@ int main(void)
 
 	AnimProperties PropertiesObject;
 
-	for(int i=0;i<10;i++)
+	for(uint32_t i=0;i<10;i++)
 	{
 		PropertiesObject.password_input[i] = 0;
 	}
@@ -168,7 +168,7 @@ int8_t check_fail_animation(AnimProperties* PropertiesPtr)
 
 int8_t check_key(AnimProperties* PropertiesPtr)
 {
-	for(int i=0;i<10;i++)
+	for(uint32_t i=0;i<10;i++)
 	{
 		if(PropertiesPtr->key[i] != PropertiesPtr->password_input[i])
 		{
@@ -181,7 +181,7 @@ int8_t check_key(AnimProperties* PropertiesPtr)
 void set_password(AnimProperties* PropertiesPtr)
 {
 	int8_t temp_pass[10] = {1,1,1,2,2,2,3,3,3,1};
-	for(int i=0;i<10;i++)
+	for(uint32_t i=0;i<10;i++)
 	{
 		PropertiesPtr->key[i] = temp_pass[i];
 	}
