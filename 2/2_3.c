@@ -38,14 +38,16 @@ int main(void)
 	PropertiesObject.error_counter = 0;
 	PropertiesObject.delay_counter = 0;
 
-	RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIOCEN);
+	RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIODEN);
 	RCC->APB2ENR |= (RCC_APB2ENR_SYSCFGEN);
 
-	GPIOC->MODER &= ~(GPIO_MODER_MODE13_Msk | GPIO_MODER_MODE14_Msk | GPIO_MODER_MODE15_Msk);
-	GPIOB->MODER &= ~(GPIO_MODER_MODE3_Msk | GPIO_MODER_MODE4_Msk | GPIO_MODER_MODE5_Msk | GPIO_MODER_MODE6_Msk);
-	GPIOB->MODER |= (1 << GPIO_MODER_MODE3_Pos) | (1 << GPIO_MODER_MODE4_Pos) | (1 << GPIO_MODER_MODE5_Pos) | (1 << GPIO_MODER_MODE6_Pos);
+	GPIOB->MODER &= ~(GPIO_MODER_MODE13_Msk | GPIO_MODER_MODE14_Msk | GPIO_MODER_MODE15_Msk);
+	GPIOD->MODER &= ~(GPIO_MODER_MODE0_Msk | GPIO_MODER_MODE1_Msk | GPIO_MODER_MODE2_Msk | GPIO_MODER_MODE3_Msk
+			| GPIO_MODER_MODE4_Msk | GPIO_MODER_MODE5_Msk | GPIO_MODER_MODE6_Msk | GPIO_MODER_MODE7_Msk);
+	GPIOD->MODER |= (1 << GPIO_MODER_MODE0_Pos) | (1 << GPIO_MODER_MODE1_Pos) | (1 << GPIO_MODER_MODE2_Pos) |
+			(1 << GPIO_MODER_MODE3_Pos) | (1 << GPIO_MODER_MODE4_Pos) | (1 << GPIO_MODER_MODE5_Pos) | (1 << GPIO_MODER_MODE6_Pos) | (1 << GPIO_MODER_MODE7_Pos);
 
-	SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PC | SYSCFG_EXTICR4_EXTI14_PC | SYSCFG_EXTICR4_EXTI15_PC;
+	SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PB | SYSCFG_EXTICR4_EXTI14_PB | SYSCFG_EXTICR4_EXTI15_PB;
 	NVIC_EnableIRQ(EXTI15_10_IRQn);
 	EXTI->IMR1 |= EXTI_IMR1_IM13 | EXTI_IMR1_IM14 | EXTI_IMR1_IM15;
 	EXTI->FTSR1 |= EXTI_FTSR1_FT13 | EXTI_FTSR1_FT14 | EXTI_FTSR1_FT15;
@@ -83,7 +85,7 @@ void EXTI15_10_IRQHandler()
 	{
 		password_input[button_counter] = 1;
 		button_counter++;
-		GPIOB->ODR |= (GPIO_ODR_OD3);
+		GPIOD->ODR |= (GPIO_ODR_OD0);
 		EXTI->PR1 = EXTI_PR1_PIF13;
 	}
 
@@ -96,7 +98,7 @@ void EXTI15_10_IRQHandler()
 	{
 		password_input[button_counter] = 2;
 		button_counter++;
-		GPIOB->ODR |= (GPIO_ODR_OD4);
+		GPIOD->ODR |= (GPIO_ODR_OD1);
 		EXTI->PR1 = EXTI_PR1_PIF14;
 	}
 
@@ -109,7 +111,7 @@ void EXTI15_10_IRQHandler()
 	{
 		password_input[button_counter] = 3;
 		button_counter++;
-		GPIOB->ODR |= (GPIO_ODR_OD5);
+		GPIOD->ODR |= (GPIO_ODR_OD2);
 		EXTI->PR1 = EXTI_PR1_PIF15;
 	}
 
@@ -129,9 +131,9 @@ void run_win_animation()
 {
 	while(1)
 	{
-		GPIOB->ODR |= (GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+		GPIOD->ODR |= (GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 		delay(500000);
-		GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+		GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 		delay(500000);
 
 	}
@@ -141,7 +143,8 @@ void run_win_animation()
 void run_fail_animation(AnimProperties* PropertiesPtr)
 {
 
-	GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+	GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3
+			| GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 
 	while(1)
 	{
@@ -150,13 +153,21 @@ void run_fail_animation(AnimProperties* PropertiesPtr)
 			return;
 		}
 
-		GPIOB->ODR = (GPIO_ODR_OD3);
+		GPIOD->ODR = (GPIO_ODR_OD0);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD4);
+		GPIOD->ODR = (GPIO_ODR_OD1);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD5);
+		GPIOD->ODR = (GPIO_ODR_OD2);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD6);
+		GPIOD->ODR = (GPIO_ODR_OD3);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD4);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD5);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD6);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD7);
 		delay(500000);
 	}
 
@@ -170,7 +181,7 @@ int8_t check_fail_animation(AnimProperties* PropertiesPtr)
 		PropertiesPtr->delay_counter++;
 		if( PropertiesPtr->delay_counter == 3)
 		{
-			GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+			GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 
 			PropertiesPtr->delay_counter = 0;
 			PropertiesPtr->error_counter++;
