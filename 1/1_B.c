@@ -3,8 +3,6 @@
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
-//led(1,2,3,4) - PB(3,4,5,6)
-//button(1,2,3) - PC(13,14,15)
 
 typedef struct
 {
@@ -30,7 +28,12 @@ enum Anim{
 int main(void)
 {
 
-	AnimProperties PropertiesObject;
+	AnimProperties PropertiesObject = { .key = {1,1,1,2,2,2,3,3,3,1},
+										.button_counter = 0,
+										.error_counter = 0,
+										.delay_counter = 0,
+										.password_input = {0,0,0,0,0,0,0,0,0,0}
+									  };
 
 	for(uint32_t i=0;i<10;i++)
 	{
@@ -39,41 +42,42 @@ int main(void)
 	PropertiesObject.button_counter = 0;
 	PropertiesObject.error_counter = 0;
 	PropertiesObject.delay_counter = 0;
-	set_password(&PropertiesObject);
 
-	RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIOCEN);
+	RCC->AHB2ENR |= (RCC_AHB2ENR_GPIOBEN | RCC_AHB2ENR_GPIODEN);
 
-	GPIOC->MODER &= ~(GPIO_MODER_MODE13_Msk | GPIO_MODER_MODE14_Msk | GPIO_MODER_MODE15_Msk);
-	GPIOB->MODER &= ~(GPIO_MODER_MODE3_Msk | GPIO_MODER_MODE4_Msk | GPIO_MODER_MODE5_Msk | GPIO_MODER_MODE6_Msk);
-	GPIOB->MODER |= (1 << GPIO_MODER_MODE3_Pos) | (1 << GPIO_MODER_MODE4_Pos) | (1 << GPIO_MODER_MODE5_Pos) | (1 << GPIO_MODER_MODE6_Pos);
+	GPIOB->MODER &= ~(GPIO_MODER_MODE13_Msk | GPIO_MODER_MODE14_Msk | GPIO_MODER_MODE15_Msk);
+	GPIOD->MODER &= ~(GPIO_MODER_MODE0_Msk | GPIO_MODER_MODE1_Msk | GPIO_MODER_MODE2_Msk | GPIO_MODER_MODE3_Msk |
+			GPIO_MODER_MODE4_Msk | GPIO_MODER_MODE5_Msk | GPIO_MODER_MODE6_Msk | GPIO_MODER_MODE7_Msk);
+	GPIOD->MODER |= (1 << GPIO_MODER_MODE0_Pos) | (1 << GPIO_MODER_MODE1_Pos) | (1 << GPIO_MODER_MODE2_Pos) | (1 << GPIO_MODER_MODE3_Pos)
+			| (1 << GPIO_MODER_MODE4_Pos) | (1 << GPIO_MODER_MODE5_Pos) | (1 << GPIO_MODER_MODE6_Pos) | (1 << GPIO_MODER_MODE7_Pos);
 
 	while(1)
 	{
 
-		if((GPIOC->IDR & GPIO_IDR_ID13) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
+		if((GPIOB->IDR & GPIO_IDR_ID13) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
 		{
 			PropertiesObject.password_input[PropertiesObject.button_counter] = 1;
 			PropertiesObject.button_counter++;
-			GPIOB->ODR |= (GPIO_ODR_OD3);
-			while((GPIOC->IDR & GPIO_IDR_ID13) == 0);
+			GPIOD->ODR |= (GPIO_ODR_OD0);
+			while((GPIOB->IDR & GPIO_IDR_ID13) == 0);
 			delay(200000);
 		}
 
-		if((GPIOC->IDR & GPIO_IDR_ID14) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
+		if((GPIOB->IDR & GPIO_IDR_ID14) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
 		{
 			PropertiesObject.password_input[PropertiesObject.button_counter] = 2;
 			PropertiesObject.button_counter++;
-			GPIOB->ODR |= (GPIO_ODR_OD4);
-			while((GPIOC->IDR & GPIO_IDR_ID14) == 0);
+			GPIOD->ODR |= (GPIO_ODR_OD1);
+			while((GPIOB->IDR & GPIO_IDR_ID14) == 0);
 			delay(200000);
 		}
 
-		if((GPIOC->IDR & GPIO_IDR_ID15) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
+		if((GPIOB->IDR & GPIO_IDR_ID15) == 0 && PropertiesObject.password_input[PropertiesObject.button_counter] == 0)
 		{
 			PropertiesObject.password_input[PropertiesObject.button_counter] = 3;
 			PropertiesObject.button_counter++;
-			GPIOB->ODR |= (GPIO_ODR_OD5);
-			while((GPIOC->IDR & GPIO_IDR_ID15) == 0);
+			GPIOD->ODR |= (GPIO_ODR_OD2);
+			while((GPIOB->IDR & GPIO_IDR_ID15) == 0);
 			delay(200000);
 		}
 
@@ -105,11 +109,10 @@ void run_win_animation()
 {
 	while(1)
 	{
-		GPIOB->ODR |= (GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+		GPIOD->ODR |= (GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 		delay(500000);
-		GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+		GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 		delay(500000);
-
 	}
 
 }
@@ -117,7 +120,7 @@ void run_win_animation()
 void run_fail_animation(AnimProperties* PropertiesPtr)
 {
 
-	GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+	GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 
 	while(1)
 	{
@@ -126,13 +129,21 @@ void run_fail_animation(AnimProperties* PropertiesPtr)
 			return;
 		}
 
-		GPIOB->ODR = (GPIO_ODR_OD3);
+		GPIOD->ODR = (GPIO_ODR_OD0);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD4);
+		GPIOD->ODR = (GPIO_ODR_OD1);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD5);
+		GPIOD->ODR = (GPIO_ODR_OD2);
 		delay(500000);
-		GPIOB->ODR = (GPIO_ODR_OD6);
+		GPIOD->ODR = (GPIO_ODR_OD3);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD4);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD5);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD6);
+		delay(500000);
+		GPIOD->ODR = (GPIO_ODR_OD7);
 		delay(500000);
 	}
 
@@ -146,7 +157,7 @@ int8_t check_fail_animation(AnimProperties* PropertiesPtr)
 		PropertiesPtr->delay_counter++;
 		if( PropertiesPtr->delay_counter == 3)
 		{
-			GPIOB->ODR &= ~(GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6);
+			GPIOD->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3 | GPIO_ODR_OD4 | GPIO_ODR_OD5 | GPIO_ODR_OD6 | GPIO_ODR_OD7);
 
 			PropertiesPtr->delay_counter = 0;
 			PropertiesPtr->error_counter++;
@@ -156,8 +167,6 @@ int8_t check_fail_animation(AnimProperties* PropertiesPtr)
 			{
 				PropertiesPtr->password_input[i] = 0;
 			}
-
-			EXTI->IMR1 |= EXTI_IMR1_IM13 | EXTI_IMR1_IM14 | EXTI_IMR1_IM15;
 
 			return RESET;
 		}
@@ -176,13 +185,4 @@ int8_t check_key(AnimProperties* PropertiesPtr)
 		}
 	}
 	return TRUE;
-}
-
-void set_password(AnimProperties* PropertiesPtr)
-{
-	int8_t temp_pass[10] = {1,1,1,2,2,2,3,3,3,1};
-	for(uint32_t i=0;i<10;i++)
-	{
-		PropertiesPtr->key[i] = temp_pass[i];
-	}
 }
