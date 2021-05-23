@@ -8,7 +8,7 @@
 void delay(int64_t delay_time);
 void setup_clock(void);
 
-int8_t time_state = 0;
+int8_t timer_state = 0;
 
 int main(void)
 {
@@ -46,9 +46,9 @@ void delay(int64_t delay_time)
 
 	while(1)
 	{
-		if(time_state == 1)
+		if(timer_state == 1)
 		{
-			time_state = 0;
+			timer_state = 0;
 			break;
 		}
 	}
@@ -93,7 +93,7 @@ void setup_clock()
 
 void TIM2_IRQHandler(void)
 {
-	time_state = 1;
+	timer_state = 1;
 	TIM2->CR1 &= ~TIM_CR1_CEN;
 	TIM2->SR &= ~TIM_SR_UIF;
 }
