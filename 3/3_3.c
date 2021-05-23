@@ -3,11 +3,9 @@
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
-#define delay_default 1000000
 
-void view(int num);
 void setup_clock(void);
-void delay(int delay_time);
+void delay(int64_t delay_time);
 
 int main(void)
 {
@@ -25,7 +23,6 @@ int main(void)
 	TIM3->PSC = 0;
 	TIM3->ARR = 499;
 	TIM3->CCR1 = 0;//Установить коэффициент заполнения на канал 3
-	//TIM3->BDTR |= TIM_BDTR_MOE;
 	TIM3->CCMR1 |= TIM_CCMR1_OC1PE | 6 << TIM_CCMR1_OC1M_Pos;
 	TIM3->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1P;//Включить 1 канал
 	TIM3->CR1 |= TIM_CR1_ARPE;//Разрешить автоматическую перегрузку счетчика
@@ -83,7 +80,7 @@ void setup_clock()
 	while ((RCC->CFGR & RCC_CFGR_SWS_PLL) != RCC_CFGR_SWS_PLL){}
 }
 
-void delay(int delay_time)
+void delay(int64_t delay_time)
 {
-	for(int i=0;i<delay_time;i++);
+	for(int64_t i=0;i<delay_time;i++);
 }
