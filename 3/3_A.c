@@ -16,9 +16,6 @@ int main(void)
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN;
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN;
 
-	GPIOE->MODER &= ~(GPIO_MODER_MODE0_Msk);
-	GPIOE->MODER |= (1 << GPIO_MODER_MODE0_Pos);
-
 	//Настроить ножки на переменную функцию
 	GPIOE->MODER &= ~(GPIO_MODER_MODE2_Msk);
 	GPIOE->MODER |= (2 << GPIO_MODER_MODE2_Pos);
