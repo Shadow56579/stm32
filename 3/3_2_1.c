@@ -26,16 +26,15 @@ int main(void)
 
 	while(1)
 	{
-		GPIOE->ODR = GPIO_ODR_OD1;
+		GPIOE->ODR |= GPIO_ODR_OD1;
 		delay(5000);
-		GPIOE->ODR = 0;
+		GPIOE->ODR &= ~GPIO_ODR_OD1;
 		delay(5000);
 	}
 
-	return 0;
 }
 
-void delay(int64_t delay_time)
+void delay(int32_t delay_time)
 {
 	int64_t temp = 64000000*delay_time/1000;
 
@@ -44,15 +43,9 @@ void delay(int64_t delay_time)
 
 	TIM2->CR1 |= TIM_CR1_CEN;
 
-	while(1)
-	{
-		if(timer_state == 1)
-		{
-			timer_state = 0;
-			break;
-		}
-	}
-
+	while(timer_state == 0);
+	timer_state = 1;
+	
 	TIM2->CR1 &= ~TIM_CR1_CEN;
 }
 
