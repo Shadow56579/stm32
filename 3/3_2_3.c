@@ -30,13 +30,13 @@ int main(void)
 
 	while(1)
 	{
-		for(int i=0;i<=256;i++)
+		for(int i=0;i<=499;i++)
 		{
 			TIM3->CCR1 = i;
 			delay(10000);
 		}
 
-		for(int i=0;i<=256;i++)
+		for(int i=0;i<=499;i++)
 		{
 			TIM3->CCR1 = 256-i;
 			delay(10000);
