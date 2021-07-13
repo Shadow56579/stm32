@@ -47,13 +47,13 @@ int main(void)
 
 	// Увеличить время считывания показания для нужного нам канала
 	ADC2->SMPR1 |= 2 << ADC_SMPR1_SMP7_Pos
-				   | 2 << ADC_SMPR1_SMP6_Pos;
+	            | 2 << ADC_SMPR1_SMP6_Pos;
 
-		// Настроить канал, из которого мы будем считывать данные.
-		// Канал №7,6 , всего каналов - 2
-		ADC2->JSQR |= 7 << ADC_JSQR_JSQ2_Pos
-					  | 6 << ADC_JSQR_JSQ1_Pos
-					  | 1 << ADC_JSQR_JL_Pos;
+	// Настроить канал, из которого мы будем считывать данные.
+	// Канал №7,6 , всего каналов - 2
+	ADC2->JSQR |= 7 << ADC_JSQR_JSQ2_Pos
+		   | 6 << ADC_JSQR_JSQ1_Pos
+		   | 1 << ADC_JSQR_JL_Pos;
 
 	TIM2->CR1 |= TIM_CR1_CEN;//включить таймер
 
