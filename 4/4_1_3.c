@@ -7,7 +7,6 @@
 
 void setup_clock(void);
 void delay(int64_t delay_size);
-void setup_adc_dma( uint16_t *array_to_write_to );
 
 uint16_t adc_current_data[2];
 
