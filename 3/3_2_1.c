@@ -36,7 +36,7 @@ int main(void)
 
 void delay(int32_t delay_time)
 {
-	int64_t temp = 64000000*delay_time/1000;
+	int16_t temp = 64000000*delay_time/1000;
 
 	TIM2->ARR = delay_time - 1;
 	TIM2->PSC = 64000000/temp - 1;
