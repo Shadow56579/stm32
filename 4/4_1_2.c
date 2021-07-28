@@ -8,7 +8,7 @@
 void delay(int64_t delay_size);
 void setup_adc_dma( uint16_t *array_to_write_to );
 
-uint16_t adc_data[4] = { 0 };
+uint16_t adc_data[2] = { 0 };
 uint16_t current_adc_value;
 
 int main(void)
