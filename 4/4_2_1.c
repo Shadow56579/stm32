@@ -61,15 +61,28 @@ int main(void)
 
 		adc_current_data = ADC2->DR;
 
-		if(adc_current_data >= 4000)
-		{
-			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3;
-		}
-		else if(adc_current_data >= 0 && adc_current_data <= 50)
+		GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
+
+		if(adc_current_data <= 1000)
 		{
 			GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
 		}
-
+		else if(adc_current_data > 1000 && adc_current_data <= 2000)
+		{
+			GPIOE->ODR |= GPIO_ODR_OD0;
+		}
+		else if(adc_current_data > 2000 && adc_current_data <= 3000)
+		{
+			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1;
+		}
+		else if(adc_current_data > 3000 && adc_current_data <= 3700)
+		{
+			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2;
+		}
+		else if(adc_current_data > 3700)
+		{
+			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3;
+		}
 	}
 
 }
