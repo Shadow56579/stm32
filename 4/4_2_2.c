@@ -80,34 +80,19 @@ void TIM2_IRQHandler(void)
 {
 	uint16_t temp = (uint16_t) ( adc_current_data / 13 );
 
-	TIM2->PSC = 1600 + temp * 100;
+	TIM2->PSC = 1600 + temp * 96;
 
 	GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
 
-	if(current_pos == 1)
-	{
-		GPIOE->ODR |= GPIO_ODR_OD0;
-	}
-	else if(current_pos == 2)
-	{
-		GPIOE->ODR |= GPIO_ODR_OD1;
-	}
-	else if(current_pos == 3)
-	{
-		GPIOE->ODR |= GPIO_ODR_OD2;
-	}
-	else if(current_pos == 4)
-	{
-		GPIOE->ODR |= GPIO_ODR_OD3;
-	}
+	GPIOE->ODR |= (1 << current_pos);
 
-	if(current_pos != 4)
+	if(current_pos != 3)
 	{
 		current_pos ++;
 	}
 	else
 	{
-		current_pos = 1;
+		current_pos = 0;
 	}
 
 	TIM2->SR &= ~TIM_SR_UIF;
@@ -117,3 +102,4 @@ void delay(int64_t delay_size)
 {
 	for(int64_t i;i<delay_size;i++);
 }
+
