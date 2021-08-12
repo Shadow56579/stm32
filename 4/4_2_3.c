@@ -81,24 +81,22 @@ int main(void)
 
 	while(1)
 	{
-		ADC2->CR |= ADC_CR_ADSTART;
 
-		while ( !(ADC2->ISR & ADC_ISR_EOS) ){}
-
-		ADC2->ISR |= ADC_ISR_EOS;
 	}
 
 }
 
 void TIM2_IRQHandler(void)
 {
-	uint32_t temp;
+	ADC2->CR |= ADC_CR_ADSTART;
 
-	temp = (uint32_t) ((adc_current_data[0] * 100) / 4096);
-	TIM3->CCR1 = (uint32_t) ((temp * 400) / 100);
+	while ( !(ADC2->ISR & ADC_ISR_EOS) ){}
 
-	temp = (uint32_t) ((adc_current_data[1] * 100) / 4096);
-	TIM3->CCR2 = (uint32_t) ((temp * 400) / 100);
+	ADC2->ISR |= ADC_ISR_EOS;
+
+	TIM3->CCR1 = (uint16_t)((adc_current_data[0] * 100 * 400) / (4096 * 100));
+
+	TIM3->CCR2 = (uint16_t)((adc_current_data[1] * 100 * 400) / (4096 * 100));
 
 	TIM2->SR &= ~TIM_SR_UIF;
 }
