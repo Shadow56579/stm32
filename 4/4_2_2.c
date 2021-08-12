@@ -51,7 +51,7 @@ int main(void)
 	// Канал №6 , всего каналов - 1
 	ADC2->SQR1 |= 6 << ADC_SQR1_SQ1_Pos | 0 << ADC_SQR1_L_Pos;
 
-	TIM2->PSC = 0;
+	TIM2->PSC = 1600;
 	TIM2->ARR = 499;
 	TIM2->DIER |= TIM_DIER_UIE;
 	NVIC_EnableIRQ(TIM2_IRQn);
@@ -61,16 +61,6 @@ int main(void)
 
 	while(1)
 	{
-		// Начать считывание данных из АЦП
-		ADC2->CR |= ADC_CR_ADSTART;
-
-		// Подождать до завершения измерения
-		while ( !(ADC2->ISR & ADC_ISR_EOS) ){}
-
-		// Сбросить флаг завершения измерения
-		ADC2->ISR |= ADC_ISR_EOS;
-
-		adc_current_data = ADC2->DR;
 
 	}
 
@@ -78,9 +68,20 @@ int main(void)
 
 void TIM2_IRQHandler(void)
 {
-	uint16_t temp = (uint16_t) ( adc_current_data / 13 );
+	// Начать считывание данных из АЦП
+	ADC2->CR |= ADC_CR_ADSTART;
 
-	TIM2->PSC = 1600 + temp * 96;
+	// Подождать до завершения измерения
+	while ( !(ADC2->ISR & ADC_ISR_EOS) ){}
+
+	// Сбросить флаг завершения измерения
+	ADC2->ISR |= ADC_ISR_EOS;
+
+	adc_current_data = ADC2->DR;
+
+	uint16_t temp = (uint16_t) ( (adc_current_data * 960) / 130 );
+
+	TIM2->PSC = (1600 + temp);
 
 	GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
 
