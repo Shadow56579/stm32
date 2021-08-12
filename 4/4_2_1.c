@@ -10,6 +10,7 @@ void delay(int64_t delay_size);
 int main(void)
 {
 	uint16_t adc_current_data;
+	uint8_t gpio_value;
 
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN | RCC_AHB2ENR_GPIOEEN;
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
@@ -48,6 +49,8 @@ int main(void)
 	// Канал №6 , всего каналов - 1
 	ADC2->SQR1 |= 6 << ADC_SQR1_SQ1_Pos | 0 << ADC_SQR1_L_Pos;
 
+	GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
+
 	while(1)
 	{
 		// Начать считывание данных из АЦП
@@ -61,28 +64,11 @@ int main(void)
 
 		adc_current_data = ADC2->DR;
 
+		gpio_value = (uint8_t)(adc_current_data >> 10);
+
 		GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
 
-		if(adc_current_data <= 1000)
-		{
-			GPIOE->ODR &= ~(GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3);
-		}
-		else if(adc_current_data > 1000 && adc_current_data <= 2000)
-		{
-			GPIOE->ODR |= GPIO_ODR_OD0;
-		}
-		else if(adc_current_data > 2000 && adc_current_data <= 3000)
-		{
-			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1;
-		}
-		else if(adc_current_data > 3000 && adc_current_data <= 3700)
-		{
-			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2;
-		}
-		else if(adc_current_data > 3700)
-		{
-			GPIOE->ODR |= GPIO_ODR_OD0 | GPIO_ODR_OD1 | GPIO_ODR_OD2 | GPIO_ODR_OD3;
-		}
+		GPIOE->ODR |= (0x0F >> (3-gpio_value));
 	}
 
 }
@@ -91,3 +77,4 @@ void delay(int64_t delay_size)
 {
 	for(int64_t i;i<delay_size;i++);
 }
+
