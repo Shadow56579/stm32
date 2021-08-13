@@ -31,9 +31,9 @@ int16_t GYRO_X;
 int16_t GYRO_Y;
 int16_t GYRO_Z;
 
-float gx_cal=0;
-float gy_cal=0;
-float gz_cal=0;
+float gx_c=0;
+float gy_c=0;
+float gz_c=0;
 
 float angle_ax;
 float angle_ay;
@@ -193,29 +193,29 @@ void readData(int16_t* ACCEL_X_PTR, int16_t* ACCEL_Y_PTR, int16_t* ACCEL_Z_PTR,
 void ICM_calibrate()
 {
 	uint16_t num = 3000;
-	gx_cal = 0;
-	gy_cal = 0;
-	gz_cal = 0;
+	gx_c = 0;
+	gy_c = 0;
+	gz_c = 0;
 	for(uint16_t i = 0;i < num;i++)
 	{
 		readData(&ACCEL_X,&ACCEL_Y,&ACCEL_Z,&GYRO_X,&GYRO_Y,&GYRO_Z);
-		gx_cal += Gx;
-		gy_cal += Gy;
-		gz_cal += Gz;
+		gx_c += Gx;
+		gy_c += Gy;
+		gz_c += Gz;
 		delay(1000);
 	}
-	gx_cal /= (float)num;
-	gy_cal /= (float)num;
-	gz_cal /= (float)num;
+	gx_c /= (float)num;
+	gy_c /= (float)num;
+	gz_c /= (float)num;
 }
 
 void receiveData()
 {
 	readData(&ACCEL_X,&ACCEL_Y,&ACCEL_Z,&GYRO_X,&GYRO_Y,&GYRO_Z);
 
-	Gx -= gx_cal;
-	Gy -= gy_cal;
-	Gz -= gz_cal;
+	Gx -= gx_c;
+	Gy -= gy_c;
+	Gz -= gz_c;
 
 	angle_gx = angle_x + (Gx * TIME_GYRO);
 	angle_gy = angle_y + (Gy * TIME_GYRO);
