@@ -79,11 +79,11 @@ int main(void)
 	SPI_Init();
 
 	delay(100000);
-    ICM_Init();
+   	ICM_Init();
 
-    ICM_calibrate();
+   	ICM_calibrate();
 
-    TIM2->CR1 |= TIM_CR1_CEN;
+    	TIM2->CR1 |= TIM_CR1_CEN;
 
 	while(1)
 	{
@@ -111,7 +111,7 @@ void SPI1_Write(uint16_t data)
  	CS_ON();
  	while (SPI1->SR & SPI_SR_BSY);
   	//Ждем, пока не освободится буфер передатчика
-    while(!(SPI1->SR & SPI_SR_TXE));
+    	while(!(SPI1->SR & SPI_SR_TXE));
  	//заполняем буфер передатчика
   	SPI1->DR = data;
   	while (SPI1->SR & SPI_SR_BSY);
