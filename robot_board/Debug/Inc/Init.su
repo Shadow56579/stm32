@@ -1,0 +1,7 @@
+core_cm0plus.h:741:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
+Init.c:5:6:device_init	16	static
+Init.c:15:6:spi1_init	8	static
+Init.c:38:6:led_init	8	static
+Init.c:48:6:drv_init	8	static
+Init.c:59:6:timer1_init	8	static
+Init.c:86:6:timer2_init	8	static

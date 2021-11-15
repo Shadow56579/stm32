@@ -1,0 +1,7 @@
+"Inc/Init.o"
+"Inc/implementation.o"
+"Inc/nrf24l01p_impi.o"
+"Src/main.o"
+"Src/syscalls.o"
+"Src/sysmem.o"
+"Startup/startup_stm32g071cbux.o"

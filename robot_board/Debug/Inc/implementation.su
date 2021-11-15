@@ -1,0 +1,10 @@
+implementation.c:3:13:delay	24	static
+implementation.c:9:9:spi1_write_function	16	static
+implementation.c:24:6:ce_high_function	8	static
+implementation.c:29:6:ce_low_function	8	static
+implementation.c:34:6:csn_high_function	8	static
+implementation.c:39:6:csn_low_function	8	static
+implementation.c:44:6:encode_buttons	24	static
+implementation.c:62:6:encode_joystick	32	static
+implementation.c:138:6:reset_joystick	8	static
+implementation.c:146:6:reset_buttons	8	static

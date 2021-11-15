@@ -1,0 +1,14 @@
+nrf24l01p_impi.c:13:10:nrf24_basic_init	32	static
+nrf24l01p_impi.c:132:10:nrf24_check_if_alive	16	static
+nrf24l01p_impi.c:158:10:nrf24_check_declarations	16	static
+nrf24l01p_impi.c:199:10:nrf24_tx_mode	32	static
+nrf24l01p_impi.c:249:10:nrf24_rx_mode	32	static
+nrf24l01p_impi.c:304:10:nrf24_set_tx_address	24	static
+nrf24l01p_impi.c:348:10:nrf24_enable_pipe1	32	static
+nrf24l01p_impi.c:394:10:nrf24_enable_pipe2_5	40	static
+nrf24l01p_impi.c:450:10:nrf24_send_message	48	static
+nrf24l01p_impi.c:519:9:nrf24_is_new_data_availiable	40	static
+nrf24l01p_impi.c:552:10:nrf24_read_message	48	static
+nrf24l01p_impi.c:611:10:nrf24_enable_interrupts	40	static
+nrf24l01p_impi.c:663:9:nrf24_get_interrupts_status	32	static
+nrf24l01p_impi.c:686:10:nrf24_update_retransmission_params	32	static
