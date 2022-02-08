@@ -19,7 +19,7 @@ nrf24l01p controller_nrf24 = {
 		.data_rate = nrf24_250_kbps,
 
 		.payload_size_in_bytes = 6,
-		.device_was_initialized = 1
+		.device_was_initialized = 0
 
 };
 
