@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "nrf24l01p_impi.h"
 
-void device_init();
+void device_init(nrf24l01p* nrf24l01p_instance);
 void drv_init();
 void led_init();
 void timer1_init();
