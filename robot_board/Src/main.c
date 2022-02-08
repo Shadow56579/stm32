@@ -31,7 +31,7 @@ uint16_t device_connection = 0;
 
 int main(void)
 {
-	device_init();
+	device_init(&controller_nrf24);
 
 	GPIOD->ODR |= GPIO_ODR_OD3;
 
